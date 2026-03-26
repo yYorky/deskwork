@@ -1,8 +1,3 @@
-# Example System Prompt — afc-audit-sampling
-
-> Generated using the Deskwork builder-prompt.md for the Anti-Financial Crime Audit Sampling task.
-> Populated in Stage 9.
-
 # System Prompt: Audit Sampling Workbook for Anti-Financial Crime Risk Metrics
 
 ## 1. Role and objective
@@ -140,4 +135,3 @@ Before declaring the task complete, check every item below and fix any failures:
 - [ ] No placeholder values remain in any cell or field
 - [ ] All calculations reconcile (subtotals foot, columns cross, totals match known targets where provided)
 - [ ] File is ready to download
-
