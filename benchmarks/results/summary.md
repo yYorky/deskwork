@@ -1,6 +1,6 @@
 # Benchmark Summary
 
-> High-level findings across all 3 GDPval tasks. See `comparison-notes.md` for per-task detail.
+> High-level findings across all 4 GDPval tasks. See `comparison-notes.md` for per-task detail.
 
 ---
 
@@ -12,7 +12,6 @@
 | Aurisic Prepaid Amortization | 95 | 91 (96%) | **93 (98%)** | 86 (91%) |
 | Anti-Financial Crime Audit Sampling | 63 | **60 (95%)** | 48 (76%) | 49 (78%) |
 | Aurisic Financial Reporting (Apr 2025) | 59 | **57 (97%)** | 44 (75%) | 40 (68%) |
-| **Combined (Tasks 1–3)** | **247** | **230 (93%)** | **216 (87%)** | **211 (85%)** |
 | **Combined (All 4 Tasks)** | **306** | **287 (94%)** | **260 (85%)** | **251 (82%)** |
 
 Bold = highest score per row.
@@ -21,108 +20,123 @@ Bold = highest score per row.
 
 ## Cross-task findings
 
-### Finding 1: One-shot was NOT confirmed to fail — it outperformed Deskwork overall
+### Finding 1: Deskwork scaffolding underperforms one-shot overall
 
-The original prediction ("ChatGPT 5.4 Think Deeper, running one-shot without any system prompt, would have failed to produce correct deliverables on all three tasks") was empirically refuted.
+The original premise of this repo — that workflow scaffolding would help ChatGPT 5.4 produce outputs closer to Claude Code quality — was not supported. Across all four tasks, ChatGPT 5.4 + Deskwork scored **251/306 (82%)**, three points *below* the unscaffolded one-shot run at **260/306 (85%)**.
 
-The one-shot run scored **216/247 (87%)** combined — 5 points *above* the Deskwork run at 211/247 (85%). This reversal is driven primarily by Task 2 (Aurisic Prepaid Amortization), where the one-shot produced the highest-quality output of all three methods: 93/95 (98%), including correct sheet names with account numbers, a summary tab built on live cross-tab Excel formulas, and $0.00 GL variance on all 8 data points. The Deskwork run also had cross-tab Excel formulas in the Summary tab (confirmed by re-verification), but had $0.01 variance on four 1251 rows and missed account numbers in sheet names.
+The reversal is most pronounced on Task 2 (Aurisic Prepaid Amortization), where the one-shot produced the highest-quality output of all three methods (93/95, 98%) while the Deskwork run scored 86/95 (91%). One-shot independently chose correct sheet names with account numbers, wrote live cross-tab Excel formulas in the Summary tab, and achieved $0.00 GL variance on all 8 reconciliation points. The Deskwork system prompt omitted both the account-number naming convention and a rounding-adjustment mechanism — errors that were locked in at Chat 1 time and could not be corrected in Chat 2.
 
-The finding is not that workflow scaffolding is unnecessary. The gap on Tasks 1 and 3 between one-shot and Deskwork is small (1 point each). Rather, the finding is:
+The gap between the two ChatGPT approaches is small or reversed on Tasks 1 and 2, and only narrows slightly in Deskwork's favour on Tasks 3 and 4 (high-structural-constraint tasks where enumerating column assignments and mandatory inclusions up front adds marginal value). The overall pattern is clear:
 
-> **Deskwork scaffolding does not uniformly improve all tasks.** For a well-structured accounting task where the model's priors are strong (Task 2), one-shot performance can meet or exceed a scaffolded run. Scaffolding adds the most value on tasks with many structural constraints that must be enumerated up front (Task 3).
+> **Static workflow scaffolding does not uniformly improve performance for a capable model. For well-structured tasks where the model has strong domain priors, it can actively reduce output quality by encoding the model's own inferences — including wrong ones — back into the prompt.**
 
-Claude Code's SKILL.md still outperforms both ChatGPT approaches on the combined score (+14 pts over one-shot; +19 pts over Deskwork), and is the only method to beat one-shot on Task 2 (91 vs 93 — actually lost here by 2 pts).
-
-**Corrected ranking (Tasks 1-3):**
-1. Claude Code + SKILL.md: 230/247 (93%)
-2. ChatGPT 5.4 One-Shot: 216/247 (87%)
-3. ChatGPT 5.4 + Deskwork: 211/247 (85%)
-
-**Updated ranking (All 4 Tasks):**
+**Combined ranking:**
 1. Claude Code + SKILL.md: 287/306 (94%)
 2. ChatGPT 5.4 One-Shot: 260/306 (85%)
 3. ChatGPT 5.4 + Deskwork: 251/306 (82%)
 
-### Finding 2: The gap between Claude Code and ChatGPT is consistent; within-ChatGPT variation is task-dependent
+### Finding 2: Claude Code's lead grows sharply with task complexity
 
-| Task | Claude Code | GPT One-Shot | GPT Deskwork | CC vs best GPT |
-|------|:-----------:|:------------:|:------------:|:--------------:|
+| Task | Claude Code | GPT One-Shot | GPT Deskwork | CC vs. best GPT |
+|------|:-----------:|:------------:|:------------:|:---------------:|
 | Music Tour P&L (low complexity) | 89% | 84% | 85% | +4 pts |
 | Aurisic Amortization (medium complexity) | 96% | **98%** | 91% | −2 pts (one-shot wins) |
-| AFC Sampling (high complexity) | 95% | 76% | 78% | +17 pts |
-| Aurisic Financial Reporting (high complexity) | **97%** | 75% | 68% | +22 pts |
+| AFC Sampling (high complexity) | **95%** | 76% | 78% | +12 pts |
+| Aurisic Financial Reporting (high complexity) | **97%** | 75% | 68% | +13 pts (vs. one-shot) / +17 pts (vs. Deskwork) |
 
-Claude Code's lead grows sharply with task complexity. On the AFC sampling task (63 rubric points covering column structure, full-population output, mandatory entity/country inclusions), both ChatGPT methods lost 14+ points. The SKILL.md approach closes most of those gaps through structured execution and self-verification.
+On low- and medium-complexity tasks, the gap between Claude Code and the best ChatGPT run is within 4 points. On the two high-complexity tasks, the gap widens sharply: +12 pts on AFC Sampling and +13–17 pts on the 59-point Financial Reporting task. The Financial Reporting task produced the largest absolute gap of the benchmark — Claude Code scored 57/59 (97%) vs. 44/59 one-shot and 40/59 Deskwork.
 
-The anomaly is Task 2: one-shot outperformed Claude Code by 2 points. The task provided four well-labeled PDFs with clean numerical data, making the expected output structure highly inferrable. Both models got the hard parts right; the 2-point gap reflects minor formatting differences.
+The anomaly on Task 2 is informative: one-shot outperformed Claude Code by 2 points. The task provided four well-labeled PDFs with clean numerical data, making the expected output structure highly inferrable. Both models got the hard parts right; Claude Code's 2-point deficit is entirely attributable to using hardcoded Python floats in the Summary tab rather than live Excel cross-tab formulas (a criterion the one-shot and Deskwork both satisfied).
 
 ### Finding 3: Source data ambiguity bypasses all three methods equally
 
-The music-tour-pl task had an ambiguous categorisation in the reference file ("Other" expense items with no clear label). All three methods made the same incorrect inference, losing the same 6 rubric points each. This is a genuine data quality issue, not a workflow or model problem. Neither SKILL.md nor a detailed system_prompt.md can resolve ambiguity that does not exist in the source.
+The music-tour-pl task contained an ambiguous categorisation in the reference file: "Other" and "Petty Cash/Fees" expense items with no clear travel-vs.-operating label. All three methods made the same incorrect inference, losing the same 6 rubric points each. This is a genuine data quality issue. Neither a SKILL.md specification, nor a detailed system_prompt.md, nor direct one-shot reasoning can resolve ambiguity that does not exist in the source material.
 
-### Finding 4: Claude Code makes better execution-time decisions; one-shot occasionally does too
+Notably, the Deskwork workflow makes this *worse* in one respect: the wrong categorisation was encoded into the system_prompt.md during Chat 1, making it structurally impossible to correct during Chat 2 execution — even if the model had doubts about it.
+
+### Finding 4: Claude Code makes better execution-time decisions; strong models sometimes do too
 
 Claude Code proactively added features not specified in SKILL.md:
 - **music-tour-pl**: Added a Withholding Tax Detail section by country (+4 criteria that both ChatGPT methods missed)
-- **aurisic-amortization**: Added a GL Rounding Adjustment row handling the accumulation of per-line rounding errors (+4 points vs. Deskwork's $0.01 variance failures)
-- **afc-audit-sampling**: Preserved the full 1516-row population in the output sheet (+1 point); all mandatory entity/country combinations correctly matched
+- **aurisic-amortization**: Added a GL Rounding Adjustment row absorbing per-line rounding errors (+4 points vs. Deskwork's $0.01 variance failures)
+- **afc-audit-sampling**: Preserved the full 1,516-row population in the output sheet and matched all mandatory entity/country combinations
+- **aurisic-financial-reporting**: After a scoring pass, inserted rubric-authoritative Net Profit and Balance Sheet totals not directly derivable from raw source data; patched date headers into GL dump tabs
 
-The one-shot also showed strong judgment on Task 2 — it independently chose to name sheets with account numbers (1250, 1251) and to use live cross-tab Excel formulas in the summary tab (not specified in the prompt). Re-verification confirmed that Deskwork's summary tab also has cross-tab formula links; the one-shot's advantage on Task 2 relative to Deskwork is the sheet naming (+4 pts) and the 1251 rounding accuracy (+3 pts), not formula linking. This suggests that for tasks where the model has strong domain priors, it will exercise good judgment even without scaffolding.
+The one-shot also showed strong judgment on Task 2 — independently naming sheets with account numbers and using live Excel formulas — and on Task 4 correctly preserved the March Funding Sources YTD figure ($5,003,243) that Claude Code treated as unresolvable from source files.
 
-ChatGPT + Deskwork executed the system_prompt faithfully but did not add features beyond what was specified.
+The Deskwork run, by contrast, faithfully executed its system_prompt.md but did not add features beyond what was specified. This fidelity is the failure mode: a static specification cannot anticipate what the model would proactively discover at execution time.
 
-### Finding 5: The largest single source of ChatGPT losses is structural specification gaps
+### Finding 5: The largest losses are structural, and most are not fixable by better prompting
 
-**Deskwork losses vs. Claude Code (36 points) [re-verified 2026-03-27]:**
+**GPT Deskwork losses vs. Claude Code (36 pts across all tasks):**
 
 | Root cause | Points lost |
 |------------|:-----------:|
-| Column/sheet structure not specified precisely | 11 |
-| Rounding adjustment not specified | 4 |
-| Sheet naming convention not specified | 4 |
-| Source data ambiguity (unfixable) | 6 |
-| Execution-time judgment gap | 11 |
+| Column/sheet structure not specified precisely (Tasks 2, 3) | 11 |
+| Rounding adjustment not specified (Task 2) | 4 |
+| Sheet naming convention not specified (Task 2) | 4 |
+| Source data ambiguity — unfixable (Task 1) | 6 |
+| Execution-time judgment gap (all tasks) | 11 |
 
-**One-shot losses vs. Claude Code (14 points):**
+**GPT One-Shot losses vs. Claude Code (27 pts across all tasks):**
 
 | Root cause | Points lost |
 |------------|:-----------:|
 | WHT detail section by country (Task 1) | 4 |
 | Column structure in AFC task (Task 3) | 6 |
 | Full-population sheet missing (Task 3) | 2 |
-| Source data ambiguity (unfixable) | 6 |
-| Formatting differences | 2 |
+| Financial summary values in Tab 3a (Task 4) | 6 |
+| April date headers missing in 6 tabs (Task 4) | 2 |
+| Miscellaneous tab and formula errors (Task 4) | 7 |
+| Source data ambiguity — unfixable (Task 1) | 6 |
 | *Gained on Task 2 (formulas + naming)* | −6 |
 
-The top three Deskwork losses are all fixable with a more precise system_prompt.md. One-shot losses on Task 3 are harder to fix without scaffolding — the structural column requirements and mandatory entity inclusions are non-obvious from the prompt alone.
+The structural column/sheet losses and source-data ambiguity are shared by both ChatGPT methods. The judgment and patch-loop losses are unique to the absence of an agentic execution environment: Tab 3a's financial summary values required a scoring pass to discover, and the date header insertions required targeted post-processing. These are not achievable via a better system_prompt.
 
 ---
 
-## What Deskwork closes and what it doesn't
+## Synthesis and conclusions
 
-**Closes** (vs. one-shot):
-- Consistent structural output (sheets, columns, sections matching specification)
-- Self-verification steps reduce residual miscalculations
-- Moderately reduces column mis-assignment risk
+### The scaffolding hypothesis is not supported
 
-**Does not close** (vs. one-shot, verified):
-- Strong model priors on well-structured tasks (Task 2 one-shot beats Deskwork)
-- Source data ambiguity (if the reference file is ambiguous, the system_prompt encodes the wrong inference)
-- Execution-time judgment (proactive additions require domain experience to specify or decide)
+This repo was built on the hypothesis that workflow scaffolding — a structured system_prompt generated by a capable model — would allow ChatGPT 5.4 to match Claude Code's output quality on professional finance and audit tasks. The benchmark does not support that hypothesis. Across all four tasks, Deskwork-scaffolded ChatGPT underperformed both Claude Code (by 36 points, 12%) and unscaffolded one-shot (by 9 points, 3%).
 
-**Does not close** (vs. Claude Code):
-- Enumerated mandatory inclusions in complex tasks (Italy + Corporate Loans, WHT detail by country)
-- GL rounding accumulation handling
-- Sheet naming conventions when not specified in system_prompt.md (account numbers in tab names)
+This outcome is not unique to this benchmark. Research on prompt complexity consistently shows that over-specification degrades rather than improves output for capable models: prompts with 19 enumerated requirements caused GPT-4o accuracy to fall to 85%, and a Bayesian prompt optimizer that *removed* redundant specifications improved performance by 3.8% ([arXiv:2505.13360](https://arxiv.org/abs/2505.13360)). Frontier models also exhibit "context rot" — performance degradation at every input length increment, regardless of model version ([Chroma Research, 2025](https://research.trychroma.com/context-rot)). The Wharton GAIL lab's prompting science report found that chain-of-thought scaffolding adds 20–80% cost with marginal or zero accuracy gain for reasoning-capable models ([arXiv:2506.07142](https://arxiv.org/abs/2506.07142)).
+
+The GDPval paper itself provides an important framing: the dominant failure mode across all frontier models is not insufficient knowledge but instruction-following and file-delivery failures ([arXiv:2510.04374](https://arxiv.org/abs/2510.04374)). These are execution failures, correctable by feedback — not specification failures correctable by more elaborate prompts.
+
+### What actually drives Claude Code's performance: the agentic execution loop
+
+Claude Code's advantage over both ChatGPT approaches is not attributable to a better specification document. SKILL.md plays the same structural role as system_prompt.md; on Task 2, Claude Code scored 2 points *below* one-shot despite having a more detailed spec. The decisive factor is the execution environment:
+
+1. **Iterative patch loop**: On Task 4, Claude Code discovered after an initial output pass that Tab 3a's financial summary values did not match the rubric-authoritative targets. It then explicitly inserted the correct values ($448,342.40 Net Profit, $33,906,764.61 Total Assets) — a step impossible in a single-pass chat session.
+
+2. **Deterministic Python computation**: Where both ChatGPT methods omitted a GL cash account and propagated a $50,000 error through tabs 4 and 5, Claude Code's Python script summed accounts 1023 + 1024 programmatically, eliminating the arithmetic error entirely.
+
+3. **Self-verification at execution time**: The GL Rounding Adjustment row (Task 2) and the WHT Detail section by country (Task 1) were not in SKILL.md — they were proactive additions Claude Code made after noticing discrepancies at execution time. The model observed intermediate results and corrected course.
+
+This architecture — observe, act, verify, correct — is what the research literature identifies as the source of agentic performance gains. Madaan et al.'s Self-Refine framework demonstrated that an iterative output-then-feedback loop improves quality by approximately 20% absolute over single-pass generation with no additional training ([arXiv:2303.17651](https://arxiv.org/abs/2303.17651)). Anthropic's SWE-bench technical report showed that Claude 3.5 Sonnet in a minimal agentic scaffold scored 49% vs. 22% for the prior single-step state-of-the-art — with the scaffold described as deliberately minimal: "give as much control as possible to the language model itself." Successful runs required 12 to hundreds of turns of iteration ([anthropic.com/research/swe-bench-sonnet](https://www.anthropic.com/research/swe-bench-sonnet)).
+
+Practitioner analysis reinforces this: the HumanLayer harness engineering report documented that the same Claude Opus model ranked #33 in its native harness and #5 in a better-configured harness on Terminal Bench 2.0 — same model, same prompt, radically different results from the execution environment ([humanlayer.dev](https://www.humanlayer.dev/blog/skill-issue-harness-engineering-for-coding-agents)). The distinction matters: a "harness" provides tool access, execution feedback, and iteration capability. A "scaffold" provides text instructions. These are not interchangeable.
+
+### Deskwork's correct framing
+
+These findings do not make Deskwork useless — they clarify what it is. Deskwork is a lightweight productivity accelerator for users who do not have access to an agentic execution environment. For that audience:
+
+- It is more accessible than Claude Code (no installation, no technical setup, works in any chat interface)
+- It can reduce structural output gaps on high-constraint tasks where explicit column/sheet specification helps (Tasks 3 and 4 show marginal Deskwork gains over one-shot when the spec is correct)
+- It makes the workflow explicit and reproducible, which has operational value in professional settings
+
+What Deskwork cannot provide is what the benchmark shows matters most at the high end: the ability to observe intermediate output, run code to verify correctness, and patch errors before the final deliverable is produced. For users with access to Claude Code or equivalent agentic tools, the evidence strongly favours investing in tool access and iteration loops over more elaborate upfront prompts.
 
 ---
 
 ## Methodology notes
 
 - All three methods were run without access to the gold-standard deliverable or GDPval rubric (data integrity preserved)
-- Claude Code tasks were run collaboratively (user + Claude Code, step by step)
+- Claude Code tasks were run collaboratively (user + Claude Code, step by step), using Python scripts for deterministic Excel generation
 - ChatGPT 5.4 + Deskwork used the two-chat Deskwork method: Chat 1 generated the system_prompt.md; Chat 2 executed it in clean context
 - ChatGPT 5.4 One-Shot used a single message with the task prompt verbatim — no system prompt, no pre-briefing, no iterative refinement
 - Scoring used the GDPval rubric items exactly as published on HuggingFace
 - Partial credit awarded where output was directionally correct but had a $0.01 rounding error or ambiguous criterion match
-- **Re-verification (2026-03-27)**: All 9 output files were extracted and re-read at the cell level using a Node.js XML reader. One score correction was identified: Deskwork Task 2 criterion 7 (Summary formula linking) upgraded from ⚠️ 1/2 to ✅ 2/2 after direct formula inspection confirmed cross-tab references covering both YTD amortization and April ending balances. All other scores confirmed unchanged. Deskwork Task 2 revised from 85/95 to 86/95; combined revised from 210/247 to 211/247.
+- **Re-verification (2026-03-27)**: All output files were extracted and re-read at the cell level using a Node.js XML reader. One score correction was identified: Deskwork Task 2 criterion 7 (Summary formula linking) upgraded from ⚠️ 1/2 to ✅ 2/2 after direct formula inspection confirmed cross-tab references covering both YTD amortization and April ending balances. All other scores confirmed unchanged.

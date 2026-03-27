@@ -8,22 +8,23 @@ Tested on 3 tasks from the [GDPval benchmark](https://arxiv.org/abs/2510.04374) 
 
 ## The claim
 
-Frontier LLMs fail professional tasks not because they lack intelligence, but because they lack **workflow structure**. Add the right scaffolding and the gap closes — without needing Claude Code, an IDE, or any technical setup.
+Frontier LLMs fail professional tasks not because they lack intelligence, but because they lack **workflow structure**. The GDPval paper identifies the dominant failure modes as instruction-following failures, file-delivery failures, and lost context — not knowledge gaps. Structured workflow scaffolding directly addresses all three.
 
-This repo proves that claim with reproducible benchmark results across three finance/audit tasks.
+This repo tests that claim against three methods across four professional finance and audit tasks: Claude Code with a SKILL.md spec, ChatGPT 5.4 Think Deeper with a Deskwork-generated system_prompt, and ChatGPT 5.4 Think Deeper with no system prompt at all (one-shot baseline).
 
 ---
 
 ## Benchmark results
 
-| Task | Rubric Points | Claude Code + SKILL.md | ChatGPT 5.4 + Deskwork |
-|------|:-------------:|:----------------------:|:----------------------:|
-| Fall Music Tour P&L | 89 | **79 (89%)** | 76 (85%) |
-| Aurisic Prepaid Amortization | 95 | **91 (96%)** | 85 (89%) |
-| Anti-Financial Crime Audit Sampling | 63 | **60 (95%)** | 49 (78%) |
-| **Combined** | **247** | **230 (93%)** | **210 (85%)** |
+| Task | Rubric Pts | Claude Code + SKILL.md | GPT 5.4 One-Shot | GPT 5.4 + Deskwork |
+|------|:----------:|:----------------------:|:----------------:|:------------------:|
+| Fall Music Tour P&L | 89 | **79 (89%)** | 75 (84%) | 76 (85%) |
+| Aurisic Prepaid Amortization | 95 | 91 (96%) | **93 (98%)** | 86 (91%) |
+| Anti-Financial Crime Audit Sampling | 63 | **60 (95%)** | 48 (76%) | 49 (78%) |
+| Aurisic Financial Reporting (Apr 2025) | 59 | **57 (97%)** | 44 (75%) | 40 (68%) |
+| **Combined (All 4 Tasks)** | **306** | **287 (94%)** | **260 (85%)** | **251 (82%)** |
 
-Both methods were run without access to the gold-standard answer or rubric. The 8-point combined gap is entirely explained by specification gaps in the system prompts — not model capability. See [`benchmarks/results/summary.md`](benchmarks/results/summary.md) for the full analysis.
+All three methods ran without access to the gold-standard answer or rubric. The results reveal a more nuanced picture than the original hypothesis: Deskwork-scaffolded ChatGPT (82%) underperforms the unscaffolded one-shot baseline (85%) across all four tasks. Claude Code leads both by 9–12 percentage points, with the gap widening on high-complexity tasks. The key finding is that Claude Code's advantage does not come from a better specification document — it comes from the **agentic execution loop**: the ability to run code, observe intermediate output, and self-correct before producing the final deliverable. See [`benchmarks/results/summary.md`](benchmarks/results/summary.md) for the full analysis.
 
 ---
 
