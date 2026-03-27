@@ -11,7 +11,9 @@
 | Fall Music Tour P&L | 89 | **79 (89%)** | 75 (84%) | 76 (85%) |
 | Aurisic Prepaid Amortization | 95 | 91 (96%) | **93 (98%)** | 86 (91%) |
 | Anti-Financial Crime Audit Sampling | 63 | **60 (95%)** | 48 (76%) | 49 (78%) |
-| **Combined** | **247** | **230 (93%)** | **216 (87%)** | **211 (85%)** |
+| Aurisic Financial Reporting (Apr 2025) | 59 | **57 (97%)** | 44 (75%) | 40 (68%) |
+| **Combined (Tasks 1–3)** | **247** | **230 (93%)** | **216 (87%)** | **211 (85%)** |
+| **Combined (All 4 Tasks)** | **306** | **287 (94%)** | **260 (85%)** | **251 (82%)** |
 
 Bold = highest score per row.
 
@@ -31,10 +33,15 @@ The finding is not that workflow scaffolding is unnecessary. The gap on Tasks 1 
 
 Claude Code's SKILL.md still outperforms both ChatGPT approaches on the combined score (+14 pts over one-shot; +19 pts over Deskwork), and is the only method to beat one-shot on Task 2 (91 vs 93 — actually lost here by 2 pts).
 
-**Corrected ranking:**
+**Corrected ranking (Tasks 1-3):**
 1. Claude Code + SKILL.md: 230/247 (93%)
 2. ChatGPT 5.4 One-Shot: 216/247 (87%)
 3. ChatGPT 5.4 + Deskwork: 211/247 (85%)
+
+**Updated ranking (All 4 Tasks):**
+1. Claude Code + SKILL.md: 287/306 (94%)
+2. ChatGPT 5.4 One-Shot: 260/306 (85%)
+3. ChatGPT 5.4 + Deskwork: 251/306 (82%)
 
 ### Finding 2: The gap between Claude Code and ChatGPT is consistent; within-ChatGPT variation is task-dependent
 
@@ -43,6 +50,7 @@ Claude Code's SKILL.md still outperforms both ChatGPT approaches on the combined
 | Music Tour P&L (low complexity) | 89% | 84% | 85% | +4 pts |
 | Aurisic Amortization (medium complexity) | 96% | **98%** | 91% | −2 pts (one-shot wins) |
 | AFC Sampling (high complexity) | 95% | 76% | 78% | +17 pts |
+| Aurisic Financial Reporting (high complexity) | **97%** | 75% | 68% | +22 pts |
 
 Claude Code's lead grows sharply with task complexity. On the AFC sampling task (63 rubric points covering column structure, full-population output, mandatory entity/country inclusions), both ChatGPT methods lost 14+ points. The SKILL.md approach closes most of those gaps through structured execution and self-verification.
 

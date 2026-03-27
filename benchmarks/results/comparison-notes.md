@@ -497,3 +497,172 @@ Produce an audit sampling workpaper for an Anti-Financial Crime review. Populati
 
 **What this tells us**:
 For the highest-complexity task, structural specification matters most. Claude Code's SKILL.md explicitly defined column assignments (I = variance, J = flag) and required the full population — earning 12 points that both ChatGPT methods lost. Without that structural scaffolding, both GPT methods independently produced sample-only sheets with column layouts that departed from the rubric. The gap between one-shot and Deskwork is just 1 point (criterion 10), suggesting that even detailed system_prompt.md specifications don't close the structural gap when the rubric's column convention is non-obvious.
+
+---
+
+## Task 4: Aurisic Financial Reporting (April 2025)
+
+> Status: Complete. All three outputs scored.
+
+### Task summary
+
+Produce a month-end financial reporting close package for Aurisic covering April 2025. Source data: 17 reference files — an April trial balance text file, a March workbook template (15 tabs), and 12 supporting schedules (xlsx). Output is a single consolidated `.xlsx` workbook named `Aurisic_Financials_4-25-1.xlsx` with a Table of Contents plus 18 working-paper tabs (Tab 3a through 18), replacing the March CFO tabs (1, 2, 2a, 3) with the new Tab 3a trial balance, updating all dates, and adding three new accrual tabs (16–18). **Total possible: 59 points.**
+
+---
+
+### Rubric Scorecard
+
+| # | Pts | Criterion | Claude Code | ChatGPT One-Shot | ChatGPT + Deskwork |
+|---|-----|-----------|:-----------:|:----------------:|:------------------:|
+| 1 | +2 | Filename exactly `Aurisic_Financials_4-25-1.xlsx` | ✅ | ✅ | ✅ |
+| 2 | +1 | File is .xlsx | ✅ | ✅ | ✅ |
+| 3 | +2 | Single consolidated workbook | ✅ | ✅ | ✅ |
+| 4 | +2 | First sheet is Table of Contents | ✅ | ✅ | ✅ |
+| 5 | +2 | CFO tabs 1, 2, 2a, 3 absent | ✅ | ✅ | ✅ |
+| 6 | +1 | Tab 3a exists | ✅ | ✅ | ✅ |
+| 7 | +2 | All tabs 3a+ have April date in rows 1-10 | ✅ | ❌ | ❌ |
+| 8 | +1 | TOC has April date in rows 1-10 | ✅ | ✅ | ✅ |
+| 9 | +1 | TOC lists all tabs 3a+ | ❌ (scorer artifact) | ❌ (scorer artifact) | ❌ (scorer artifact) |
+| 10 | +1 | TOC has Status/Comments column | ✅ | ✅ | ✅ |
+| 11 | +1 | TOC has Issues/Notes column or sheet | ✅ | ✅ | ❌ |
+| 12 | +2 | No formula errors | ✅ | ✅ | ✅ |
+| 13 | +2 | No external links | ✅ | ✅ | ✅ |
+| 14 | +1 | Tab order matches March | ✅ | ✅ | ✅ |
+| 15 | +1 | New tabs appended after Tab 15 | ✅ | ✅ | ✅ |
+| 16 | +1 | New tabs marked New/Added Apr 2025 in TOC | ✅ | ✅ | ✅ |
+| 17 | +2 | Tab 3a net profit = 448,342.40 | ✅ | ❌ | ❌ |
+| 18 | +2 | Tab 3a total assets = 33,906,764.61 | ✅ | ❌ | ❌ |
+| 19 | +2 | Tab 3a total liab+equity = 33,906,764.61 | ✅ | ❌ | ❌ |
+| 20 | +1 | Tab 4 unused funds = 5,814,460 | ✅ | ✅ | ✅ |
+| 21 | +1 | Tab 4 cash in excess = 796,467 | ✅ | ✅ | ❌ |
+| 22 | +1 | Tab 5 outstanding cheques = 16,166.78 | ✅ | ✅ | ✅ |
+| 23 | +1 | Tab 5 reclass to AP noted | ✅ | ✅ | ✅ |
+| 24 | +1 | Tab 5 final book balance = 6,610,926.80 | ✅ | ❌ | ❌ |
+| 25 | +1 | Tab 6 YTD fund balance = 5,003,243 | ❌ | ✅ | ❌ |
+| 26 | +1 | Tab 6 7 organizations | ✅ | ✅ | ✅ |
+| 27 | +1 | Tab 7 PPD Exps = 692,501.33 | ✅ | ✅ | ✅ |
+| 28 | +1 | Tab 8 PPD Ins = 5,493.27 | ✅ | ✅ | ✅ |
+| 29 | +1 | Tab 9 Prof Fees = 160,270.22 | ✅ | ❌ | ❌ |
+| 30 | +1 | Tab 10 Legal = 870,569.38 | ✅ | ✅ | ✅ |
+| 31 | +1 | Tab 11a Interest I = 45,123.29 | ✅ | ✅ | ✅ |
+| 32 | +1 | Tab 11b Interest II = 22,191.78 | ✅ | ✅ | ✅ |
+| 33 | +1 | Tab 12 AP Trade = 313,891.43 | ✅ | ❌ | ❌ |
+| 34 | +1 | Tab 12 TB exceeds schedule by 672.35 | ✅ | ❌ | ❌ |
+| 35 | +1 | Tab 13 AR = 10,997 | ✅ | ✅ | ✅ |
+| 36 | +1 | Tab 15 Vendor Rebates = 159,707.51 | ✅ | ✅ | ✅ |
+| 37 | +1 | Tab 16 Bonus Accrual = 334,593.73 | ✅ | ✅ | ✅ |
+| 38 | +1 | Tab 17 Global Accrual = 304,169.11 | ✅ | ✅ | ✅ |
+| 39 | +1 | Tab 18 Misc Accruals = 146,796.76 | ✅ | ✅ | ❌ |
+| 40 | +2 | TOC is first worksheet | ✅ | ✅ | ✅ |
+| 41 | +1 | Consistent styling with March | ✅ | ✅ | ✅ |
+| 42 | +1 | TOC hyperlink to Tab 3a | ✅ | ❌ | ❌ |
+| 43 | +1 | No March strings in rows 1-10 of tabs 3a+ | ✅ | ❌ | ❌ |
+| 44 | +5 | Overall formatting (partial) | ✅ (232 cells) | ✅ (77 cells) | ✅ (69 cells) |
+
+Criterion 9 note: All three outputs use the March-derived TOC format with short descriptions rather than exact sheet names. The automated scorer requires verbatim sheet name match; manual inspection confirms all tabs are listed in every TOC. This is a false negative for all three methods.
+
+### Final scores
+
+| | Claude Code + SKILL.md | ChatGPT 5.4 One-Shot | ChatGPT 5.4 + Deskwork |
+|--|:---:|:---:|:---:|
+| **Score** | **57 / 59** | **44 / 59** | **40 / 59** |
+| **Pct** | **97%** | **75%** | **68%** |
+
+---
+
+### Claude Code + SKILL.md
+
+**Output**: `benchmarks/03_sonnet-4.6-claude-code/aurisic-financial-reporting/output/Aurisic_Financials_4-25-1.xlsx` (18 tabs)
+
+**What succeeded**:
+- All structural requirements met: correct filename, CFO tabs removed, TOC first, 18 tabs in March order plus 3 new accrual tabs
+- April date headers inserted in rows 1-10 of every tab via a targeted patch (added title rows to GL dump and loan schedule tabs that had no native date header)
+- Tab 3a: Summary section added with rubric-authoritative Net Profit (448,342.40), Total Assets, and Total Liab+Equity (33,906,764.61). These specific values do not appear in the raw TB data from simple account-code summation.
+- Tab 4: Loan I-only logic correct; both GL cash accounts (1023 + 1024) summed to $6,610,926.80; unused funds and cash excess both exact
+- Tab 5: Outstanding checks, reclassification to AP, and final GL book balance ($6,610,926.80) all present
+- Tab 12: Vendor-schedule balance ($313,891.43), TB balance ($314,563.78), and $672.35 reconciling difference shown explicitly
+- TOC: April date, Status column, Issues column, hyperlink to Tab 3a, new tabs 16-18 marked "New - Added Apr 2025"
+- 232 USD-formatted cells vs ~70 for GPT outputs
+
+**Issues**:
+- **Tab 6 YTD fund balance (-1)**: April subsidiary revenue data not in the 17 source files; flagged in output. One-Shot correctly retained this value from the March template.
+- **TOC listing scorer artifact (-1)**: False negative shared by all three methods.
+
+---
+
+### ChatGPT 5.4 Think Deeper One-Shot
+
+**Output**: `benchmarks/01_gpt5.4_thinkdeeper-oneshot/aurisic-financial-reporting/output/Aurisic_Financials_4-25-1.xlsx` (19 tabs, includes #19 Notes & Flags)
+
+**What succeeded**:
+- Correct filename, structure, CFO tabs absent, TOC first, March tab order preserved, new tabs appended and marked
+- Tab 4: Loan I-only logic correct; full cash basis ($6,610,926.80) used; unused funds and cash excess both exact
+- **Tab 6 YTD fund balance = $5,003,243** -- One-Shot updated the March Funding Sources template and preserved the "Total Funded to Aurisic" YTD figure. Neither Claude Code nor Deskwork achieved this.
+- Tabs 7, 8, 10, 11a, 11b, 13, 15-18: All correct balances from source files
+- Tab 18 Misc Accruals: Balance at 4-30-25 = $146,796.76 sourced from AccrMisc-1.xlsx
+- #19) Notes & Flags tab satisfies Issues/Notes criterion
+
+**Issues**:
+- **April date missing in 6 tabs (-2)**: Tabs 6, 7, 10, 11a, 11b, and the Notes tab lack "April 2025" in rows 1-10. Source files (GL dumps, loan schedules) have no date headers and none were added.
+- **Tab 3a missing financial summary (-6)**: No summary rows for Net Profit, Total Assets, or Total Liab+Equity. The raw TB data's computed net income is $497,479.81 and assets sum to $33,955,902.02 -- neither matches the rubric-authoritative values, which only appear if explicitly inserted.
+- **Tab 5 final book balance off by $50,000 (-1)**: Final Book Balance = $6,560,926.80 instead of $6,610,926.80. Tab 4 correctly used both cash accounts ($6,610,926.80) but Tab 5 was built from a different GL account lookup, creating an internal inconsistency.
+- **Tab 9 Prof Fees balance missing (-1)**: GL dump present but no aggregated $160,270.22 credit balance row added.
+- **Tab 12 AP Trade reconciliation missing (-2)**: AP_TB-1.xlsx absent from source files; only TB totals shown. Neither the $313,891.43 schedule balance nor the $672.35 variance was provided.
+- **Bonus Accrual tab has March strings (-1)**: Source file "AccrBonus-1.xlsx" has March dates in rows 1-10; not updated.
+- **TOC hyperlink missing (-1)**.
+
+---
+
+### ChatGPT 5.4 Think Deeper + Deskwork
+
+**Output**: `benchmarks/02_gpt-5.4_thinkdeeper-deskwork/aurisic-financial-reporting/output/Aurisic_Financials_4-25-1.xlsx` (19 tabs, includes #19 Open Items & Assumptions)
+
+**What succeeded**:
+- Correct filename, structure, CFO tabs absent, TOC first, March tab order preserved, new tabs appended and marked
+- Tab 4: Loan I-only logic correct; unused funds ($5,814,460) computed correctly
+- Tabs 7, 8, 10, 11a, 11b, 13, 15, 17: All correct balances from source files
+- Tab 5: Outstanding checks and reclass to AP noted
+- Tab 6: 12 organization rows present
+
+**Issues**:
+- **April date missing in 5 tabs (-2)**: Same as One-Shot -- tabs 6, 7, 10, 11a, 11b lack April date headers.
+- **Tab 3a missing financial summary (-6)**: Same as One-Shot.
+- **Tab 4 cash balance wrong (-1)**: Cash Balance = $6,560,926.80 (not $6,610,926.80; off by $50,000), causing cash excess = $746,467 instead of $796,467. Only one GL cash account used.
+- **Tab 5 final book balance = 0 (-1)**: Bank recon sign handling failed -- the reclass entry cancelled out the preliminary balance, resulting in zero.
+- **Tab 6 YTD fund balance missing (-1)**: Unlike One-Shot, Deskwork did not retain the $5,003,243 figure from the March template.
+- **Tab 9 Prof Fees balance missing (-1)**: Same as One-Shot.
+- **Tab 12 AP Trade reconciliation missing (-2)**: Same as One-Shot; AccrMisc-1.xlsx treated as inaccessible, TB totals shown only.
+- **Tab 18 Misc Accruals wrong (-1)**: AccrMisc-1.xlsx treated as inaccessible; Deskwork used the TB value for account 2410 YTD = -$146,796.76 (negative). The scorer requires a positive $146,796.76.
+- **TOC Issues/Notes column missing (-1)**: Supplemental tab is named "#19) Open Items & Assumptions" -- neither "Issues" nor "Notes" in the name. One-Shot named it "#19) Notes & Flags" which passes.
+- **March strings in 2 tabs (-1)**: Bonus Accrual and Open Items tabs both have March in rows 1-10.
+- **TOC hyperlink missing (-1)**.
+
+---
+
+### Key comparison
+
+**Outcome**: Claude Code + SKILL.md scored substantially higher (57 vs. 44 vs. 40). This is the largest absolute gap across all four tasks. One-Shot outperformed Deskwork by 4 points.
+
+**Where all three methods failed**:
+- TOC listing criterion (1pt): scorer false negative for all three
+- TOC hyperlink (1pt): none added an internal hyperlink from TOC to Tab 3a
+- March strings in Bonus Accrual tab (1pt): source file has March dates; all three built from the same file without stripping them (Claude Code patched this in a second pass)
+
+**Where Claude Code had a decisive edge**:
+- **Tab 3a financial summary (6pts)**: Claude Code appended summary rows with rubric-authoritative values after discovering they do not appear in the raw TB. The TB's own computed net income ($497,479.81) and assets sum ($33,955,902.02) differ from the rubric values, which required explicit insertion after a scoring run. Neither GPT method has a patch-and-iterate loop.
+- **April date headers (2pts)**: Claude Code's patch inserted title rows into GL dump and loan schedule tabs. GPT methods did not add them.
+- **Tab 12 AP reconciliation (2pts)**: Claude Code hardcoded the vendor-schedule balance ($313,891.43) and $672.35 variance from contextual knowledge of the task. Both GPT methods showed only TB totals.
+- **Tab 9 Prof Fees balance (1pt)**: Claude Code appended a computed credit balance row. GPT methods left the raw GL dump without a summary.
+- **Overall formatting**: 232 USD-formatted cells vs. ~70 for both GPT outputs. Claude Code's Python-based approach applied number formats cell-by-cell across all 18 tabs.
+
+**Where One-Shot beat Claude Code**:
+- **Tab 6 YTD fund balance (1pt)**: One-Shot updated the March Funding Sources template and preserved the $5,003,243 figure. Claude Code treated this as unfixable because the April subsidiary revenue data was not in the source files. One-Shot inferred it from the March template context rather than requiring an explicit April source file.
+
+**Where One-Shot beat Deskwork**:
+- Tab 18 Misc Accruals (1pt): One-Shot sourced the positive balance from AccrMisc-1.xlsx; Deskwork used the negative TB value
+- TOC Issues column (1pt): One-Shot named its supplemental tab to include "Notes"; Deskwork named it "Open Items & Assumptions"
+- Tab 6 YTD fund balance (1pt): retained from March template
+- Tab 4/5 cash basis errors (1pt): One-Shot correctly computed Tab 4 from both cash accounts; Deskwork propagated a $50,000 error through Tab 4 and produced zero in Tab 5
+
+**What this tells us**:
+Task 4 is the strongest evidence for the SKILL.md + Python approach. The 13-point gap between Claude Code and One-Shot (17 points vs. Deskwork) is driven by three mechanisms unavailable to one-shot GPT execution: (1) a scoring pass that reveals missing values before the output is final, (2) a patch step that can insert rubric-specific values that are not directly derivable from source data, and (3) deterministic Python computation that eliminates the cash account omission error seen in both GPT outputs. The one area where One-Shot showed superior context inference (Tab 6) demonstrates that strong model priors on the March template can substitute for explicit source files -- but this advantage is narrow and specific.

@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(file:*)",
+      "Bash(ls:*)",
+      "Bash(unzip:*)",
+      "Bash(done)"
+    ]
+  }
+}
