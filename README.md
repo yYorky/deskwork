@@ -2,7 +2,7 @@
 
 > A portable workflow kit that closes the gap between one-shot LLM chat and Claude Code-level output quality on professional office tasks.
 
-Tested on 3 tasks from the [GDPval benchmark](https://arxiv.org/abs/2510.04374) (OpenAI, 2025) — real professional tasks scored by domain experts.
+Tested on 4 tasks from the [GDPval benchmark](https://arxiv.org/abs/2510.04374) (OpenAI, 2025) — real professional tasks scored by domain experts.
 
 ---
 
